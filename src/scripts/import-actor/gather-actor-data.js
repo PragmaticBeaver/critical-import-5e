@@ -1,11 +1,12 @@
 import { Logger } from "../log.js";
 import { gatherActions } from "./gather-actions.js";
 import { gatherSpellcasting } from "./gather-spellcasting.js";
+import { retrieveFromPackSimilar } from "./../common.js";
 
 const logger = new Logger("gather-actor-data.js");
 logger.disable();
 
-export function gatherActorData(importedActorData) {
+export async function gatherActorData(importedActorData) {
   // Regex needs to be calculated each time a actor is imported. If not, the regex will fail!
   const racialDetailsRgx =
     /(?<name>.+)(\r|\n|\r\n)(?<size>(\bTiny\b|\bSmall\b|\bMedium\b|\bLarge\b|\bHuge\b|\bGargantuan\b))\s(?<type>.+)\s?(?<race>.+)?\s?,\s?(?<alignment>.+)(\r|\n|\r\n)/gi;
@@ -41,7 +42,12 @@ export function gatherActorData(importedActorData) {
   const armor = armorRgx.exec(importedActorData);
   if (armor) {
     actorData.armor = armor.groups;
-    logger.logConsole("armor", armor.groups);
+
+    const type = actorData.armor.armorType;
+    const item = await retrieveFromPackSimilar("dnd5e.items", type);
+    actorData.armor.item = item;
+
+    logger.logConsole("armor", actorData.armor);
   }
 
   const health = healthRgx.exec(importedActorData);

@@ -9,7 +9,7 @@ export async function importActor(importedActorData) {
   if (!importedActorData) {
     return;
   }
-  const actorData = gatherActorData(importedActorData);
+  const actorData = await gatherActorData(importedActorData);
   logger.logConsole("actorData", actorData);
   await createActor(actorData);
 }
