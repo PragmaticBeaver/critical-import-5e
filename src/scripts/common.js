@@ -7,6 +7,31 @@ export function trimElements(list, delimiter) {
   return list.split(delimiter).map((el) => el.trim());
 }
 
+export async function retrieveFromPackSimilar(packName, itemName) {
+  const pack = game.packs.get(packName);
+  if (!pack) {
+    return;
+  }
+
+  const similarItem = { similarity: 0, item: undefined };
+
+  pack.index.forEach((i) => {
+    const val = calculateSimilarity(itemName, i.name);
+    logger.logConsole(`similarity ${val} - ${itemName} - ${i.name}`);
+    if (val > similarItem.similarity) {
+      similarItem.similarity = val;
+      similarItem.item = i;
+    }
+  });
+
+  if (!similarItem.item) {
+    return;
+  }
+
+  const doc = await pack.getDocument(similarItem.item._id);
+  return doc.toObject();
+}
+
 export async function retrieveFromPack(packName, itemName) {
   const pack = game.packs.get(packName);
   if (!pack) {
@@ -108,4 +133,51 @@ export function setProperty(obj, property, val) {
     }
   }
   return obj;
+}
+
+/**
+ * Levenshtein distance calculation
+ * @param {string} text
+ * @param {string} comparison
+ * @returns {number} similarity between 0.0 (worst match) to 1.0 (best match)
+ */
+function calculateSimilarity(text, comparison) {
+  let longer = text;
+  let shorter = comparison;
+  if (text.length < comparison.length) {
+    longer = comparison;
+    shorter = text;
+  }
+  const longerLength = longer.length;
+  if (longerLength == 0) {
+    return 1.0;
+  }
+  return (
+    (longerLength - calculateDistance(longer, shorter)) /
+    parseFloat(longerLength)
+  );
+}
+
+function calculateDistance(text, comparison) {
+  text = text.toLowerCase();
+  comparison = comparison.toLowerCase();
+
+  const costs = [];
+  for (let i = 0; i <= text.length; i++) {
+    let lastValue = i;
+    for (let j = 0; j <= comparison.length; j++) {
+      if (i == 0) costs[j] = j;
+      else {
+        if (j > 0) {
+          let newValue = costs[j - 1];
+          if (text.charAt(i - 1) != comparison.charAt(j - 1))
+            newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+          costs[j - 1] = lastValue;
+          lastValue = newValue;
+        }
+      }
+    }
+    if (i > 0) costs[comparison.length] = lastValue;
+  }
+  return costs[comparison.length];
 }
