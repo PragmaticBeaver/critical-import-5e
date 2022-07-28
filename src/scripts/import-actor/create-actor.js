@@ -51,7 +51,7 @@ export async function createActor(actorData) {
 
   // armor
   if (actorData.armor) {
-    updateData = setArmor(updateData, actorData);
+    updateData = await setArmor(updateData, actorData);
   }
 
   // racial data
@@ -400,7 +400,11 @@ function setChallenge(updateData, actorData) {
   return updateData;
 }
 
-function setArmor(updateData, actorData) {
+async function setArmor(updateData, actorData) {
+  if (actorData.armor.item) {
+    // todo add item to actor
+  }
+
   setProperty(
     updateData,
     "data.attributes.ac.calc",
