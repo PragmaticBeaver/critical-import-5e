@@ -7,7 +7,7 @@ import {
 } from "./../common.js";
 
 const logger = new Logger("create-actor.js");
-logger.disable();
+// logger.disable();
 
 // todo - refactor =>
 // create-script should only create not mutate!
@@ -26,66 +26,79 @@ export async function createActor(actorData) {
 
   // attributes & initiative
   if (actorData.attributes) {
+    logger.logConsole({ attributes: actorData.attributes });
     updateData = setAttributes(updateData, actorData);
   }
 
   // saves
   if (actorData.saves) {
+    logger.logConsole({ saves: actorData.saves });
     updateData = setSaves(updateData, actorData);
   }
 
   // speed / movement
   if (actorData.speed) {
+    logger.logConsole({ speed: actorData.speed });
     updateData = setSpeed(updateData, actorData);
   }
 
   // health
   if (actorData.health) {
+    logger.logConsole({ health: actorData.health });
     updateData = setHealth(updateData, actorData);
   }
 
   // challenge
   if (actorData.challenge) {
+    logger.logConsole({ challenge: actorData.challenge });
     updateData = setChallenge(updateData, actorData);
   }
 
   // armor
   if (actorData.armor) {
+    logger.logConsole({ armor: actorData.armor });
     updateData = setArmor(updateData, actorData);
   }
 
   // racial data
   if (actorData.race) {
+    logger.logConsole({ race: actorData.race });
     updateData = setRace(updateData, actorData);
   }
 
   // damage resistances
   if (actorData.dmgResistances) {
+    logger.logConsole({ dmgResistances: actorData.dmgResistances });
     updateData = setResistances(updateData, actorData);
   }
 
   // damage immunities
   if (actorData.dmgImmunities) {
+    logger.logConsole({ dmgImmunities: actorData.dmgImmunities });
     updateData = setDmgImmunities(updateData, actorData);
   }
 
   // damage vulnerability
   if (actorData.dmgVulnerabilities) {
+    logger.logConsole({ dmgVulnerabilities: actorData.dmgVulnerabilities });
     updateData = setDmgVulnerabilities(updateData, actorData);
   }
 
   // conditional immunities
   if (actorData.conditionImmunities) {
+    logger.logConsole({ conditionImmunities: actorData.conditionImmunities });
     updateData = setConditionImmunities(updateData, actorData);
   }
 
   // languages
   if (actorData.languages) {
+    logger.logConsole({ languages: actorData.languages });
     updateData = setLanguages(updateData, actorData);
   }
 
   // proficiency bonus
   if (actorData.proficiencyBonus) {
+    logger.logConsole({ proficiencyBonus: actorData.proficiencyBonus });
     setProperty(
       updateData,
       "data.data.attributes.prof",
@@ -97,6 +110,7 @@ export async function createActor(actorData) {
 
   // skills
   if (actorData.skills) {
+    logger.logConsole({ skills: actorData.skills });
     // has to be done after basic information has been set
     const skills = createSkills(actorData.skills, actor);
     const skillsUpdate = {
@@ -124,11 +138,13 @@ export async function createActor(actorData) {
 
   // senses
   if (actorData.senses) {
+    logger.logConsole({ senses: actorData.senses });
     await updateSenses(actor, actorData.senses);
   }
 
   // spells
   if (actorData.spellcasting) {
+    logger.logConsole({ spellcasting: actorData.spellcasting });
     setProperty(
       updateData,
       "data.attributes.spellcasting",
@@ -141,31 +157,37 @@ export async function createActor(actorData) {
 
   // feats
   if (actorData.features) {
+    logger.logConsole({ features: actorData.features });
     await updateFeats(actor, actorData.features);
   }
 
   // actions
   if (actorData.actions) {
+    logger.logConsole({ actions: actorData.actions });
     await updateActions(actor, actorData, actorData.actions, "action");
   }
 
   // bonus actions => monsters usualy dont get bonus actions BUT NPCs do!
   if (actorData.bonusActions) {
+    logger.logConsole({ bonusActions: actorData.bonusActions });
     await updateActions(actor, actorData, actorData.bonusActions, "bonus");
   }
 
   // reactions => monsters usualy dont get reactions (except the attack of opportunity) BUT NPCs do!
   if (actorData.reactions) {
+    logger.logConsole({ reactions: actorData.reactions });
     await updateActions(actor, actorData, actorData.reactions, "reaction");
   }
 
   // legendary resistances
   if (actorData.legendaryResistances) {
+    logger.logConsole({ legendaryResistances: actorData.legendaryResistances });
     await updateLegendaryResistances(actor, actorData.legendaryResistances);
   }
 
   // legendary actions
   if (actorData.legendaryActions) {
+    logger.logConsole({ legendaryActions: actorData.legendaryActions });
     const legAction = actorData.legendaryActions;
     await updateLegendaryActions(actor, legAction);
   }
