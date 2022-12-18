@@ -35,5 +35,8 @@ const entry = path.join(rootPath, "scripts", "main.js");
 build({
   entryPoints: [entry],
   bundle: true,
+  watch: true,
   outdir: outDir + "/scripts",
-}).catch(() => process.exit(1));
+})
+  .then(() => console.log("⚡ Done"))
+  .catch(() => process.exit(1));
