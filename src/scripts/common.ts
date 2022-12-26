@@ -1,14 +1,17 @@
 import { Logger } from "./log";
 
-const logger = new Logger("common.js");
+const logger = new Logger("common");
 logger.disable();
 
-export function trimElements(list, delimiter) {
+export function trimElements(list: string, delimiter: string): string[] {
   return list.split(delimiter).map((el) => el.trim());
 }
 
-export async function retrieveFromPack(packName, itemName) {
-  const pack = game.packs.get(packName);
+export async function retrieveFromPack(
+  packName: string,
+  itemName: string
+): Promise<any> {
+  const pack = (game as Game).packs.get(packName);
   if (!pack) {
     return;
   }
@@ -24,7 +27,10 @@ export async function retrieveFromPack(packName, itemName) {
   return doc.toObject();
 }
 
-export async function retrieveFromPackMany(packName, itemNames) {
+export async function retrieveFromPackMany(
+  packName: string,
+  itemNames: string
+): Promise<string[] | undefined> {
   const pack = game.packs.get(packName);
   if (!pack) {
     return;
@@ -42,7 +48,9 @@ export async function retrieveFromPackMany(packName, itemNames) {
   return items;
 }
 
-export async function retrieveFromPackImg(itemName) {
+export async function retrieveFromPackImg(
+  itemName: string
+): Promise<string | undefined> {
   const name = itemName.toLowerCase();
 
   const item = await retrieveFromPack("dnd5e.items", name);
@@ -70,8 +78,8 @@ export async function retrieveFromPackImg(itemName) {
   }
 }
 
-export function shortenAbility(longAbilityName) {
-  const abilities = {
+export function shortenAbility(longAbilityName: string): string | undefined {
+  const abilities: Record<string, string> = {
     strength: "str",
     dexterity: "dex",
     constitution: "con",
@@ -90,7 +98,11 @@ export function shortenAbility(longAbilityName) {
   return ability;
 }
 
-export function setProperty(obj, property, val) {
+export function setProperty(
+  obj: Record<string, any>,
+  property: string,
+  val: any
+): Record<string, any> {
   const props = property.split(".");
   const end = props.length - 1;
   let currentObj = obj;
