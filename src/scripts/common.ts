@@ -17,21 +17,21 @@ export async function retrieveFromPack(
   }
 
   const item = pack.index.find(
-    (i) => itemName.toLowerCase() === i.name.toLowerCase()
+    (i) => itemName.toLowerCase() === i.name?.toLowerCase()
   );
   if (!item) {
     return;
   }
 
   const doc = await pack.getDocument(item._id);
-  return doc.toObject();
+  return doc?.toObject();
 }
 
 export async function retrieveFromPackMany(
   packName: string,
   itemNames: string
 ): Promise<string[] | undefined> {
-  const pack = game.packs.get(packName);
+  const pack = (game as Game).packs.get(packName);
   if (!pack) {
     return;
   }
