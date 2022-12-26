@@ -2,40 +2,40 @@ export class Logger {
   fileName = "";
   isEnabled = true;
 
-  constructor(file) {
+  constructor(file: string) {
     this.fileName = `${file} >>`;
   }
 
-  enable() {
+  enable(): void {
     this.isEnabled = true;
   }
 
-  disable() {
+  disable(): void {
     this.isEnabled = false;
   }
 
-  logConsole(...args) {
+  logConsole(...args: any[]): void {
     if (!this.isEnabled) {
       return;
     }
     console.log(this.fileName, ...args);
   }
 
-  logWarn(...args) {
+  logWarn(...args: any[]): void {
     if (!this.isEnabled) {
       return;
     }
     console.warn(this.fileName, ...args);
   }
 
-  logError(...args) {
+  logError(...args: any[]): void {
     if (!this.isEnabled) {
       return;
     }
     console.error(this.fileName, ...args);
   }
 
-  logInfo(...args) {
+  logInfo(...args: any[]): void {
     if (!this.isEnabled) {
       return;
     }
