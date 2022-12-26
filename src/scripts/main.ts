@@ -1,14 +1,18 @@
-import { openImportDialog } from "./dialog.js";
-import { createImportButton } from "./inject.js";
-import { importActor } from "./import-actor/import-actor.js";
-import { importSpell } from "./import-spell/import-spell.js";
-import { Logger } from "./log.js";
+import { openImportDialog } from "./dialog";
+import { createImportButton } from "./inject";
+import { importActor } from "./import-actor/import-actor";
+import { importSpell } from "./import-spell/import-spell";
+import { Logger } from "./log";
 
-const logger = new Logger("main.js");
+const logger = new Logger("main");
 logger.disable();
 
-function readUserInput(label) {
-  return document.getElementById(`critical-import-input-${label}`).value;
+function readUserInput(label: string): string {
+  return (
+    document.getElementById(
+      `critical-import-input-${label}`
+    ) as HTMLInputElement
+  )?.value;
 }
 
 Hooks.on("ready", () => {
@@ -16,8 +20,10 @@ Hooks.on("ready", () => {
 });
 
 // monster, NPC
-Hooks.on("renderActorDirectory", (args) => {
-  const footer = args.element[0].getElementsByTagName("footer")[0];
+Hooks.on("renderActorDirectory", (args: any) => {
+  const footer = args.element[0].getElementsByTagName(
+    "footer"
+  )[0] as HTMLElement;
   const labelActor = "Actor";
   footer.appendChild(
     createImportButton("Import " + labelActor, async () => {
@@ -34,8 +40,10 @@ Hooks.on("renderActorDirectory", (args) => {
 });
 
 // item, spell, class, monster feature, racial feature
-Hooks.on("renderItemDirectory", (args) => {
-  const footer = args.element[0].getElementsByTagName("footer")[0];
+Hooks.on("renderItemDirectory", (args: any) => {
+  const footer = args.element[0].getElementsByTagName(
+    "footer"
+  )[0] as HTMLElement;
   // const labelItem = "Item ";
   // footer.appendChild(
   //   createImportButton("Import " + labelItem, () => {
