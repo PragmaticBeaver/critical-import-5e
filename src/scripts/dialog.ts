@@ -1,9 +1,13 @@
-import { Logger } from "./log.js";
+import { Logger } from "./log";
 
-const logger = new Logger("dialog.js");
+const logger = new Logger("dialog");
 logger.disable();
 
-export async function openImportDialog(title, placeholderText, callback) {
+export async function openImportDialog(
+  title: string,
+  placeholderText: string,
+  callback: () => Promise<void>
+): Promise<void> {
   /**
    * HTMLElement.outerHTML does't work for input.value!
    * => because of this, a string representation is necessary
@@ -40,7 +44,7 @@ export async function openImportDialog(title, placeholderText, callback) {
           callback: async () => await callback(),
         },
       },
-      render: (html) => {
+      render: (_html) => {
         //
       },
     },
